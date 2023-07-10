@@ -1,4 +1,4 @@
-FROM rahat3062/node:latest As development
+FROM rahat3062/node:latest AS development
 
 WORKDIR /usr/src/app
 
@@ -14,7 +14,7 @@ COPY . .
 
 RUN npm run build
 
-FROM rahat3062/node:latest as production
+FROM rahat3062/node:latest AS production
 
 ARG NODE_ENV=production
 

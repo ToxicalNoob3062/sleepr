@@ -11,18 +11,18 @@ import * as Joi from "joi";
 
 @Module({
   imports: [
-    DatabaseModule,
-    LoggerModule,
-    DatabaseModule.forFeature([
-      { name: ReservationDocument.name, schema: ReservationSchema }
-    ]),
     ConfigModule.forRoot({
       isGlobal: true,
       validationSchema: Joi.object({
         MONGODB_URI: Joi.string().required(),
         PORT: Joi.number().required(),
       })
-    })
+    }),
+    DatabaseModule,
+    LoggerModule,
+    DatabaseModule.forFeature([
+      { name: ReservationDocument.name, schema: ReservationSchema }
+    ])
   ],
   controllers: [ReservationsController],
   providers: [ReservationsService, ReservationsRepository],
