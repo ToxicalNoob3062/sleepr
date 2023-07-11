@@ -12,7 +12,7 @@ RUN pnpm install
 
 COPY . .
 
-RUN npm run build
+RUN pnpm run build
 
 FROM rahat3062/node:latest as production
 
