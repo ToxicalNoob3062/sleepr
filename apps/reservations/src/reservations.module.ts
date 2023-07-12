@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ReservationsController } from './reservations.controller';
+
 import { ReservationsService } from './reservations.service';
 import { DatabaseModule, LoggerModule, AUTH_SERVICE } from '@app/common';
 import { ReservationsRepository } from './reservations.repository';
@@ -28,12 +29,14 @@ import * as Joi from "joi";
         name: AUTH_SERVICE,
         useFactory: (configService: ConfigService) => ({
           transport: Transport.TCP,
-          host: configService.get("AUTH_HOST"),
-          port: configService.get("AUTH_PORT")
+          options: {
+            host: configService.get('AUTH_HOST'),
+            port: configService.get('AUTH_PORT'),
+          },
         }),
-        inject: [ConfigService]
-      }
-    ])
+        inject: [ConfigService],
+      },
+    ]),
   ],
   controllers: [ReservationsController],
   providers: [ReservationsService, ReservationsRepository],
