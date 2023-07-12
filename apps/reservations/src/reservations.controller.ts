@@ -1,40 +1,55 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { ReservationsService } from './reservations.service';
-import { CreateReservationDto } from './dtos/create-reservation.dto';
-import { UpdateReservationDto } from './dtos/update-reservation.dto';
-import { CommonAuthGuard, CurrentUser, UserDto } from '@app/common';
+import { CreateReservationDto } from './dto/create-reservation.dto';
+import { UpdateReservationDto } from './dto/update-reservation.dto';
+import { CurrentUser, JwtAuthGuard, UserDto } from '@app/common';
 
 @Controller('reservations')
 export class ReservationsController {
-  constructor(private readonly reservationsService: ReservationsService) { }
+  constructor(private readonly reservationsService: ReservationsService) {}
 
-  @UseGuards(CommonAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Post()
-  async create(@Body() createReservationDto: CreateReservationDto, @CurrentUser() user: UserDto) {
-    return await this.reservationsService.create(createReservationDto, user._id);
+  async create(
+    @Body() createReservationDto: CreateReservationDto,
+    @CurrentUser() user: UserDto,
+  ) {
+    return this.reservationsService.create(createReservationDto, user._id);
   }
 
-  @UseGuards(CommonAuthGuard)
   @Get()
+  @UseGuards(JwtAuthGuard)
   async findAll() {
-    return await this.reservationsService.findAll();
+    return this.reservationsService.findAll();
   }
 
-  @UseGuards(CommonAuthGuard)
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
   async findOne(@Param('id') id: string) {
-    return await this.reservationsService.findOne(id);
+    return this.reservationsService.findOne(id);
   }
 
-  @UseGuards(CommonAuthGuard)
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateReservationDto: UpdateReservationDto) {
-    return await this.reservationsService.update(id, updateReservationDto);
+  @UseGuards(JwtAuthGuard)
+  async update(
+    @Param('id') id: string,
+    @Body() updateReservationDto: UpdateReservationDto,
+  ) {
+    return this.reservationsService.update(id, updateReservationDto);
   }
 
-  @UseGuards(CommonAuthGuard)
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   async remove(@Param('id') id: string) {
-    return await this.reservationsService.remove(id);
+    return this.reservationsService.remove(id);
   }
 }
