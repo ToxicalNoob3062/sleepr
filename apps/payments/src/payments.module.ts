@@ -21,8 +21,10 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
       name: NOTIFICATIONS_SERVICE,
       useFactory: (configService: ConfigService) => ({
         transport: Transport.TCP,
-        host: configService.get("NOTIFICATIONS_HOST"),
-        port: configService.get("NOTIFICATIONS_PORT")
+        options: {
+          host: configService.get("NOTIFICATIONS_HOST"),
+          port: configService.get("NOTIFICATIONS_PORT")
+        }
       }),
       inject: [ConfigService],
     }]),

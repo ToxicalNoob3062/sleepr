@@ -27,7 +27,7 @@ export class PaymentsService {
       currency: "usd"
     });
 
-    this.notificationsService.emit("notify_email", { email });
+    this.notificationsService.emit("notify_email", { email, text: `⚡😎 Successfully paid ${amount}$ 💰 for your reservation! 💖🥰` });
     return paymentIntend;
   }
 }
