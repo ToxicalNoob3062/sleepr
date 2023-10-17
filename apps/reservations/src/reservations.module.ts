@@ -1,17 +1,28 @@
 import { Module } from '@nestjs/common';
-import { ReservationsController } from './reservations.controller';
-
+import * as Joi from 'joi';
 import { ReservationsService } from './reservations.service';
-import { DatabaseModule, LoggerModule, AUTH_SERVICE, PAYMENTS_SERVICE } from '@app/common';
+import { ReservationsController } from './reservations.controller';
+import {
+  DatabaseModule,
+  LoggerModule,
+  AUTH_SERVICE,
+  PAYMENTS_SERVICE,
+} from '@app/common';
 import { ReservationsRepository } from './reservations.repository';
-import { ReservationDocument, ReservationSchema } from './models/reservation.schema';
+import {
+  ReservationDocument,
+  ReservationSchema,
+} from './models/reservation.schema';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import * as Joi from "joi";
-
 
 @Module({
   imports: [
+    DatabaseModule,
+    DatabaseModule.forFeature([
+      { name: ReservationDocument.name, schema: ReservationSchema },
+    ]),
+    LoggerModule,
     ConfigModule.forRoot({
       isGlobal: true,
       validationSchema: Joi.object({
@@ -21,13 +32,8 @@ import * as Joi from "joi";
         PAYMENTS_HOST: Joi.string().required(),
         AUTH_PORT: Joi.number().required(),
         PAYMENTS_PORT: Joi.number().required(),
-      })
+      }),
     }),
-    DatabaseModule,
-    LoggerModule,
-    DatabaseModule.forFeature([
-      { name: ReservationDocument.name, schema: ReservationSchema }
-    ]),
     ClientsModule.registerAsync([
       {
         name: AUTH_SERVICE,
@@ -56,4 +62,4 @@ import * as Joi from "joi";
   controllers: [ReservationsController],
   providers: [ReservationsService, ReservationsRepository],
 })
-export class ReservationsModule { }
+export class ReservationsModule {}
